@@ -1,7 +1,7 @@
-resource "google_compute_instance" "instance-20250125-025754" {
+resource "google_compute_instance" "instance-name" {
   boot_disk {
     auto_delete = true
-    device_name = "instance-20250125-025754"
+    device_name = "instance-name"
 
     initialize_params {
       image = "projects/debian-cloud/global/images/debian-11-bullseye-v20250123"
@@ -18,7 +18,7 @@ resource "google_compute_instance" "instance-20250125-025754" {
 
   guest_accelerator {
     count = 1
-    type  = "projects/tokushukai-gcp06/zones/us-central1-a/acceleratorTypes/nvidia-a100-80gb" #ACCELERATOR (GPU NAME)
+    type  = "xxxxx" #ACCELERATOR (GPU NAME)
   }
 
   labels = {
@@ -40,7 +40,7 @@ resource "google_compute_instance" "instance-20250125-025754" {
 
     queue_count = 0
     stack_type  = "IPV4_ONLY"
-    subnetwork  = "projects/tokushukai-gcp06/regions/us-central1/subnetworks/default"
+    subnetwork  = "network"
   }
 
   scheduling {
@@ -51,7 +51,7 @@ resource "google_compute_instance" "instance-20250125-025754" {
   }
 
   service_account {
-    email  = "761719187648-compute@developer.gserviceaccount.com"
+    email  = "xxxxxxx@developer.gserviceaccount.com"
     scopes = ["https://www.googleapis.com/auth/devstorage.read_only", "https://www.googleapis.com/auth/logging.write", "https://www.googleapis.com/auth/monitoring.write", "https://www.googleapis.com/auth/service.management.readonly", "https://www.googleapis.com/auth/servicecontrol", "https://www.googleapis.com/auth/trace.append"]
   }
 
