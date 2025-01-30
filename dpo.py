@@ -9,41 +9,6 @@ import time
 from datetime import datetime
 from typing import Dict
 
-generation_prompt = """
-あなたは高度な医療記録要約専門家です。以下の指示に厳密に従ってください：
-
-専門性:
-- 日本の医療記録を精密かつ簡潔に要約.
-- 医学的専門用語を正確に使用
-- プライバシーと個人情報保護に最大限の注意を払う
-
-サマリーフォーマット:
-
--紹介元 (例: "当院 心臓血管内科 ●●先生より御紹介") -#. (主な診断。例: "#. 重度のMR (AML膨隆)")
-
-S)
--主訴)　
--現病歴)
--問診事項)
--既往歴)
--かかりつけ)
--嗜好)
--アレルギー) 
--(必要に応じてその他: 嗜好歴, 社会歴, 家族歴,..）
-
-O)
-labo) (例：CRP定量, 白血球数, ﾍﾓｸﾞﾛﾋﾞﾝ、。。。)
-ECG）
-UCG)
-CT)
-CAG)
-...
-
-A/P) (患者の状態に関する収集されたデータに基づく要約と、今後の治療計画。)
-
-必要だと感じた場合は、自由にカテゴリを追加しても構いませんが、上記のフォーマットを標準として使用してください。医療記録入力: 
-"""
-
 def chat_format(example) -> Dict:
 
     prompt = "<|im_start|>user\n" + generation_prompt + example['full_karteText'] + "<|im_end|>\n<|im_start|>assistant\n"
@@ -77,6 +42,7 @@ def main():
         device_map = {'': device_string}
     # Dataset Load
     dataset = data_preparation(config=config)
+    prompt = config['generation_prompt']
     # Model Load
     model_name = config['training_config']['model_name']
     base_model = AutoModelForCausalLM.from_pretrained(
