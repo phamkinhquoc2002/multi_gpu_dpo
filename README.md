@@ -93,9 +93,3 @@ training_config:
 - Verify Google Cloud quota limits
 - Check Terraform and GCloud configurations
 - Review GPU driver compatibility
-
-## 📄 License
-[Add your license information here]
-
-## 🤝 Contributing
-[Add contribution guidelines if applicable]
