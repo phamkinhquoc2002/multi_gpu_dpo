@@ -9,9 +9,9 @@ import time
 from datetime import datetime
 from typing import Dict
 
-def chat_format(example) -> Dict:
+def chat_format(example, col: str) -> Dict:
 
-    prompt = "<|im_start|>user\n" + generation_prompt + example['full_karteText'] + "<|im_end|>\n<|im_start|>assistant\n"
+    prompt = "<|im_start|>user\n" + generation_prompt + example[col] + "<|im_end|>\n<|im_start|>assistant\n"
     chosen = example['tsdata'] + "<|im_end|>\n"
     rejected = example['rejected'] + "<|im_end|>\n"
 
@@ -32,18 +32,17 @@ def data_preparation(
 
 
 def main():
-    # Configuration Load
+    
     with open('config.yaml', 'r') as f:
         config = yaml.safe_load(f)
-    # DDP - Data Parallelism Configuration
+    
     device_map = 'DDP'
     if device_map == 'DDP':
         device_string = PartialState().process_index
         device_map = {'': device_string}
-    # Dataset Load
     dataset = data_preparation(config=config)
     prompt = config['generation_prompt']
-    # Model Load
+    
     model_name = config['training_config']['model_name']
     base_model = AutoModelForCausalLM.from_pretrained(
         model_name,
@@ -54,14 +53,15 @@ def main():
         attn_implementation="flash_attention_2",
         device_map=device_map
     ) 
-    # Prepare the model for Lora
+    
+    
     model = prepare_model_for_kbit_training(base_model)
     model.to(torch.bfloat16)
     model.gradient_checkpointing_enable()
-
     tokenizer = AutoTokenizer.from_pretrained(model_name, padding="left", model_max_length=config['training_config']['max_length'], trust_remote_code=True)
     tokenizer.pad_token = tokenizer.eos_token
-    #Lora Configuration
+    
+    
     lora_config = LoraConfig(
         #Lora Rank
         r=config['training_config']['peft_config']['lora_r'],
@@ -75,11 +75,9 @@ def main():
 
     dpo_config = DPOConfig(
         output_dir="./results",
-        #1つのGPUあたりのバッチサイズ。2つのGPUがある場合、1回の処理で2倍のバッチサイズを処理します。
         per_device_train_batch_size=config['training_config']['dpo_config']['per_device_train_batch_size'],
         per_device_eval_batch_size=config['training_config']['dpo_config']['per_device_eval_batch_size'],
         gradient_accumulation_steps=config['training_config']['dpo_config']['gradient_accumulation_steps'],
-        ##最適化関数、別のものに変更可能。詳しくはhuggingface.comをご確認ください！
         optim='adamw_8bit',
         save_steps=2,
         learning_rate=2e-4,
@@ -108,13 +106,13 @@ def main():
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"Total number of trainable parameters: {trainable_params}")
     start_time = time.time()
+    
     try:
         trainer.train()
     except Exception as e:
         print(f"Training error: {e}")
         trainer.save_model("./emergency_checkpoint")
     finally:
-        # Track time: End time
         end_time = time.time()
         time_run = end_time - start_time
         trainer.model.save_pretrained("final_checkpoint")
@@ -130,8 +128,7 @@ def main():
                 'time_run': time_run,
                 'cost': (time_run / 3600) * config['gpu_config']['hourly_cost'],
             }, f)
-
-
+            
 if __name__ == "__main__":
     torch.cuda.empty_cache()
     main()
