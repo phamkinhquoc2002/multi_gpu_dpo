@@ -7,7 +7,6 @@ This guide provides step-by-step instructions for deploying a Direct Preference 
 - Terraform installed
 - Google Cloud SDK
 - Python 3.10+
-## 🖥️ Local Setup
 
 ### 1. GPU Configuration
 Verify and configure your GPU settings:
@@ -21,8 +20,6 @@ Provide the following details when prompted:
 - GPU type
 - Number of GPUs
 - Required computational resources
-
-## ☁️ Google Cloud Deployment
 
 ### 2. Google Cloud Authentication
 
@@ -88,8 +85,3 @@ training_config:
 - Check GPU availability in your chosen region
 - Monitor resource utilization
 - Use preemptible instances for cost optimization
-
-## 🆘 Troubleshooting
-- Verify Google Cloud quota limits
-- Check Terraform and GCloud configurations
-- Review GPU driver compatibility
