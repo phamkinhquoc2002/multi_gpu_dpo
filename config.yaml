@@ -3,7 +3,7 @@ generation_prompt: #prompt
 gpu_config:
   hourly_cost: #in dollar
 training_config:
-  model_name: EQUES/MedLLama3-JP-v2
+  model_name: #model name
   max_length: 8192
   max_completion_length: 2048 
   peft_config:
