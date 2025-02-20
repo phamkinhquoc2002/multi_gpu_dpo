@@ -2,13 +2,12 @@
 
 ## Overview
 This guide provides step-by-step instructions for deploying a Direct Preference Optimization (DPO) fine-tuning pipeline on Google Cloud with Terraform and custom configurations.
+
 ## Prerequisites
 
-- Terraform installed
-- Google Cloud SDK
 - Python 3.10+
 
-### 1. GPU Configuration
+## GPU Configuration
 Verify and configure your GPU settings:
 
 ```bash
@@ -21,32 +20,9 @@ Provide the following details when prompted:
 - Number of GPUs
 - Required computational resources
 
-### 2. Google Cloud Authentication
-
-```bash
-# Authenticate with Google Cloud
-gcloud auth application-default login
-```
-
-### 3. Terraform Infrastructure Provisioning
-
-1. Configure Terraform variables in `variables.tf`
-2. Initialize and deploy the infrastructure:
-
-```bash
-# Initialize Terraform
-terraform init
-
-# Plan the infrastructure
-terraform plan
-
-# Apply the configuration
-terraform apply
-```
-
 ## 🔧 Fine-tuning Configuration
 
-### 4. Customize `config.yaml`
+### Customize `config.yaml`
 
 ```yaml
 # Dataset Configuration
@@ -75,12 +51,6 @@ training_config:
     gradient_accumulation_steps: 
     num_train_epochs: 
 ```
-
-## 🔒 Security Considerations
-- Use minimal necessary permissions
-- Rotate credentials regularly
-- Monitor GPU instance costs
-
 ## 💡 Tips
 - Check GPU availability in your chosen region
 - Monitor resource utilization
