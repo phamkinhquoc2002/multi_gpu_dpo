@@ -1,7 +1,7 @@
 # 🚀 DPO Fine-tuning with Multi-GPU
 
 ## Overview
-This guide provides step-by-step instructions for deploying a Direct Preference Optimization (DPO) fine-tuning pipeline on Google Cloud with Terraform and custom configurations.
+This guide provides step-by-step instructions for Direct Preference Optimization (DPO) fine-tuning pipeline on Google Cloud in custom configurations.
 
 ## Prerequisites
 
